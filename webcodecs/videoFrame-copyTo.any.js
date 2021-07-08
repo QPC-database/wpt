@@ -50,6 +50,15 @@ function assert_layout_equals(actual, expected) {
 
 promise_test(async t => {
   const frame = makeI420_4x2();
+  frame.close();
+
+  let data = new Uint8Array(12);
+  assert_throws_dom('InvalidStateError', () => frame.allocationSize());
+  assert_throws_dom('InvalidStateError', () => frame.copyTo(data));
+}, 'Test closed frame.');
+
+promise_test(async t => {
+  const frame = makeI420_4x2();
   const expectedLayout = [
       {offset: 0, stride: 4},
       {offset: 8, stride: 2},
